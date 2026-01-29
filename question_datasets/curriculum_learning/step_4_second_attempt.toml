@@ -1,5 +1,5 @@
 [general]
-num_samples_per_question = 25
+num_samples_per_question = 250
 
 # global context that will be prepended to every question text.
 # If you leave this empty or remove it, nothing extra is added.
@@ -38,6 +38,7 @@ Return exactly one word: black, white, or empty.
 # ============================================================
 
 [questions.Q101]
+num_samples = 500
 text = """
 Task:
 Count the total number of black stones currently placed on the board (Player 1).
@@ -56,6 +57,7 @@ Return a single integer (no extra text).
 # ============================================================
 
 [questions.Q201]
+num_samples = 500
 text = """
 Task:
 Count the total number of white stones currently placed on the board (Player 2).
@@ -73,6 +75,7 @@ Return a single integer (no extra text).
 # Answer: one integer
 # ============================================================
 [questions.Q304]
+num_samples = 500
 text = """
 Task:
 Compute the number of remaining empty intersections in the shown snapshot.
@@ -103,6 +106,7 @@ Return exactly one word: black, white, or empty.
 # Answer: one integer
 # ============================================================
 [questions.Q102]
+num_samples = 500
 text = """
 Task:
 Determine how many stones belong to Player 1 (black) in the current position.
@@ -119,6 +123,7 @@ Return exactly one integer.
 # Answer: one integer
 # ============================================================
 [questions.Q202]
+num_samples = 500
 text = """
 Task:
 Determine how many stones belong to Player 2 (white) in the current position.
@@ -135,6 +140,7 @@ Return exactly one integer.
 # Answer: one integer
 # ============================================================
 [questions.Q303]
+num_samples = 500
 text = """
 Task:
 Count every empty intersection on the board in the current position.
@@ -153,6 +159,7 @@ Return a single integer and nothing else.
 # Answer: one integer
 # ============================================================
 [questions.Q401]
+num_samples = 500
 text = """
 You are Player {player} playing {color}.
 
@@ -169,6 +176,7 @@ Answer format: a single integer.
 """
 
 [questions.Q402]
+num_samples = 500
 text = """
 You are Player {player} with {color} stones.
 
@@ -189,6 +197,7 @@ Answer format: a single integer (no extra text).
 # Answer: one integer
 # ============================================================
 [questions.Q501]
+num_samples = 500
 text = """
 You are Player {player} playing {color}.
 
@@ -201,6 +210,7 @@ Answer format: a single integer.
 """
 
 [questions.Q502]
+num_samples = 500
 text = """
 You are Player {player} with {color} stones.
 
@@ -239,9 +249,7 @@ Answer format:
 - Output only the matrix.
 """
 
-# DIFFICULT VARIATIONS
 [questions.Q3]
-num_samples=250
 text = """
 Task:
 Focus on the single coordinate (row {row}, col {col}) with 0-based indexing.
@@ -256,7 +264,7 @@ Return exactly one word: black, white, or empty.
 # Answer: one integer
 # ============================================================
 [questions.Q103]
-num_samples=250
+num_samples = 500
 text = """
 Task:
 Compute the total number of black stones on the board as shown.
@@ -271,7 +279,7 @@ Return one integer only (no explanation).
 # Answer: one integer
 # ============================================================
 [questions.Q203]
-num_samples=250
+num_samples = 500
 text = """
 Task:
 Compute the total number of white stones on the board as shown.
@@ -282,11 +290,11 @@ Return one integer only (no explanation).
 """
 
 # ============================================================
-# Q301–Q304: count_empty_intersections (INVERSE ORDER)
+# Q301–Q304: count_empty_intersections
 # Answer: one integer
 # ============================================================
 [questions.Q302]
-num_samples=250
+num_samples = 500
 text = """
 Task:
 Determine the total number of empty intersections available right now.
@@ -303,7 +311,7 @@ Return exactly one integer.
 # Answer: one integer
 # ============================================================
 [questions.Q403]
-num_samples=250
+num_samples = 500
 text = """
 You play as {color} (Player {player}).
 
@@ -321,7 +329,7 @@ Answer format: a single integer.
 # Answer: one integer
 # ============================================================
 [questions.Q503]
-num_samples=250
+num_samples = 500
 text = """
 You play as {color} (Player {player}).
 
@@ -332,14 +340,12 @@ A segment is four adjacent intersections in a straight line, all your stones.
 Answer format: a single integer.
 """
 
-# Completely New:
 # ============================================================
 # Q601–Q604: determine_who_won
 # Answer: one word: black|white|draw
 # ============================================================
 
 [questions.Q601]
-num_samples=250
 text = """
 This is the final board position of a finished game.
 
@@ -350,7 +356,6 @@ Answer format: exactly one word: black, white, or draw.
 """
 
 [questions.Q602]
-num_samples=250
 text = """
 The game is over (final board).
 
@@ -361,7 +366,6 @@ Answer format: exactly one word: black, white, or draw.
 """
 
 [questions.Q603]
-num_samples=250
 text = """
 You are given the completed game position.
 
@@ -371,16 +375,252 @@ Decide whether Player 1 (black) won, Player 2 (white) won, or the game is a draw
 Answer format: exactly one word: black, white, or draw.
 """
 
-# ============================================================
 # Q901–Q904: print_board_matrix
 # Answer: exactly 15 lines, each 15 integers separated by single spaces.
 # ============================================================
 [questions.Q903]
-num_samples = 250
 text = """
 Task:
 Print the board state as numbers with the encoding:
 0 = empty, 1 = black, 2 = white.
 
 Answer format: the matrix only, as 15 lines of 15 space-separated integers.
+"""
+
+# DIFFICULT VARIATIONS
+# ============================================================
+# Q1–Q4: color_at_position
+# Answer: one word: black|white|empty
+# Params: {row}, {col} are 0-based
+# ============================================================
+[questions.Q4]
+num_samples=250
+text = """
+Task:
+At row {row} and column {col} (0-based), identify what is present at that intersection.
+Do not guess or infer future moves; answer only for the current position shown.
+
+Output constraint:
+Return exactly one word: black, white, or empty.
+"""
+
+
+# ============================================================
+# Q101–Q104: count_black_stones
+# Answer: one integer
+# ============================================================
+[questions.Q104]
+num_samples=500
+text = """
+Task:
+How many intersections are occupied by black stones (Player 1) in the current snapshot?
+Count each black stone exactly once.
+
+Output constraint:
+Return a single integer and nothing else.
+"""
+
+
+# ============================================================
+# Q201–Q204: count_white_stones
+# Answer: one integer
+# ============================================================
+[questions.Q204]
+num_samples=500
+text = """
+Task:
+How many intersections are occupied by white stones (Player 2) in the current snapshot?
+Count each white stone exactly once.
+
+Output constraint:
+Return a single integer and nothing else.
+"""
+
+
+# ============================================================
+# Q301–Q304: count_empty_intersections (INVERSE!!)
+# Answer: one integer
+# ============================================================
+[questions.Q301]
+num_samples=500
+text = """
+Task:
+Count how many intersections are empty in the current board position.
+
+What to count:
+Count only intersections that contain no stone.
+
+Output constraint:
+Return a single integer (no extra text).
+"""
+
+# ============================================================
+# Q401–Q404: three_in_a_row
+# Definition: EXACT three-in-a-row segments (maximal runs of length 3).
+# Excludes any length-3 window that is part of a longer contiguous run (4+).
+# Answer: one integer
+# ============================================================
+[questions.Q404]
+num_samples=1000
+text = """
+You are Player {player} and your stones are {color}.
+
+Task:
+Count every occurrence of exactly three adjacent {color} stones in a straight line
+(horizontal, vertical, or diagonal), where "exactly" means:
+- the three stones are contiguous, and
+- the immediately adjacent intersection on both ends (along that line) is NOT a {color} stone
+  (it may be empty, opponent, or off-board).
+
+Answer format: a single integer.
+"""
+
+# ============================================================
+# Q501–Q504: four_in_a_row
+# Here we define "four-in-a-row segments" (length-4 windows).
+# Answer: one integer
+# ============================================================
+[questions.Q504]
+num_samples=1000
+text = """
+You are Player {player} and your stones are {color}.
+
+Task:
+Count every occurrence of four adjacent {color} stones in a straight line
+(horizontal, vertical, or diagonal).
+
+Answer format: a single integer.
+"""
+
+# ============================================================
+# Q601–Q604: determine_who_won
+# Answer: one word: black|white|draw
+# ============================================================
+[questions.Q604]
+num_samples=250
+text = """
+Final position (no more moves will be played).
+
+Task:
+Determine the outcome.
+
+Answer format: exactly one word: black, white, or draw.
+"""
+
+# ============================================================
+# Q901–Q904: print_board_matrix
+# Answer: exactly 15 lines, each 15 integers separated by single spaces.
+# ============================================================
+[questions.Q904]
+num_samples=250
+text = """
+Represent the position as a 15×15 grid of integers:
+0 (empty), 1 (black), 2 (white).
+
+Answer format:
+Exactly 15 lines, each with 15 integers separated by single spaces, and nothing else.
+"""
+
+# COMPLETELY NEW:
+# ============================================================
+# Q701–Q704: can_you_win
+# Answer: one word: yes|no
+# Definition: "yes" iff the current player has at least one immediate winning move.
+# ============================================================
+[questions.Q701]
+num_samples=250
+text = """
+You are Player {player} playing {color}. It is your turn.
+
+Task:
+Can you win immediately on this move?
+In other words: is there at least one legal placement of a {color} stone
+that creates 5 in a row right now?
+
+Answer format: exactly one word: yes or no.
+"""
+
+[questions.Q702]
+num_samples=250
+text = """
+You are Player {player} with {color} stones, and it is your move.
+
+Task:
+Does there exist a legal move that wins the game immediately (forms 5 in a row)?
+
+Answer format: exactly one word: yes or no.
+"""
+
+[questions.Q703]
+num_samples=250
+text = """
+It is your turn. You are Player {player} playing {color}.
+
+Task:
+Determine whether you have an immediate winning move available.
+
+Answer format: exactly one word: yes or no.
+"""
+
+[questions.Q704]
+num_samples=250
+text = """
+You play {color} stones (Player {player}). It is your move.
+
+Task:
+Is there at least one winning move right now (one move ends the game)?
+
+Answer format: exactly one word: yes or no.
+"""
+
+# ============================================================
+# Q801–Q804: can_you_lose
+# Answer: one word: yes|no
+# Definition: "yes" iff opponent has at least one immediate winning move on THEIR next move.
+# ============================================================
+
+[questions.Q801]
+num_samples=250
+text = """
+You are Player {player} playing {color}. It is your turn.
+
+Task:
+If you do not block, can your opponent win on their next turn?
+(That is: does the opponent currently have at least one immediate winning move available?)
+
+Answer format: exactly one word: yes or no.
+"""
+
+[questions.Q802]
+num_samples=250
+text = """
+You are Player {player} with {color} stones, and it is your move.
+
+Task:
+Does your opponent have a one-move win available on their next turn?
+
+Answer format: exactly one word: yes or no.
+"""
+
+[questions.Q803]
+num_samples=250
+text = """
+It is your turn. You are Player {player} playing {color}.
+
+Task:
+Determine whether there is an immediate winning threat by the opponent
+(a move that would win for them on their next turn).
+
+Answer format: exactly one word: yes or no.
+"""
+
+[questions.Q804]
+num_samples=250
+text = """
+You play {color} stones (Player {player}). It is your move.
+
+Task:
+Is the opponent currently threatening a one-move win on their next turn?
+
+Answer format: exactly one word: yes or no.
 """

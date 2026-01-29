@@ -35,9 +35,9 @@ def init_train(
         weight_decay=0.01,
         num_train_epochs=epochs,
         save_strategy="steps",
-        save_steps=100,
+        save_steps=400, # 100 for strategy / smaller curric_steps
         eval_strategy="steps",
-        eval_steps=100,
+        eval_steps=400, # 100 for strategy / smaller curric_steps
         save_total_limit=4,
         logging_dir=os.path.join(out, "logs"),
         logging_steps=20,
