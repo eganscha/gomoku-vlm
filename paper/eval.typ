@@ -336,7 +336,7 @@ zeichnen die Einzelergebnisse ein differenzierteres, teilweise
 vielversprechendes Bild: Sie deuten darauf hin, dass Curriculum Learning
 prinzipiell lernwirksam sein kann, in dieser Umsetzung jedoch eine
 deutlich vorsichtigere Konfiguration erfordert, wenn zugleich über
-Spielzustände *und* Fragefoki curriculisiert wird.
+Spielzustände und Fragefoki curriculisiert wird.
 
 === Begründung der Einschätzung (lokale Gewinne vs. Forgetting)
 
@@ -359,7 +359,7 @@ Netto-Performance über alle Foki hinweg konsistent zu verbessern.
 
 Letztendlich ist festzuhalten, dass eine belastbare Bewertung deutlich
 mehr Iterationen erfordert: Die relative Schwierigkeit muss pro Fokus
-*und* pro Rundenintervall systematisch bestimmt werden. Zudem sind
+und pro Rundenintervall systematisch bestimmt werden. Zudem sind
 zentrale Hyperparameter, insbesondere die Lernrate, sowie der
 Trainingsdatamix (z. B. gezieltes Oversampling einzelner Foki und
 unterschiedliche Rehearsal-Konfigurationen) in mehreren Experimenten
