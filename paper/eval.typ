@@ -246,7 +246,7 @@ Questionreihenfolge (Q4 $->$ Q1) trainiert.
   Perzeption eine Bewertung von Threat-Strukturen erfordern.
 
 Zur Reduktion von catastrophic forgetting wird in jeder
-Curriculum-Stufe ein kleiner Rehearsal-Anteil aus zuvor trainierten
+Curriculum-Stufe ein Rehearsal-Anteil aus zuvor trainierten
 Stufen beibehalten. Konkret werden pro bereits behandelter
 Fragevariation jeweils 25 Rehearsal-Samples in den Trainingsmix
 aufgenommen, um erlernte visuelle Teilfähigkeiten während der
