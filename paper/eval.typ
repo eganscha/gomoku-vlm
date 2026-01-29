@@ -11,6 +11,7 @@ und Fragevariation (`Q...`) ausgewiesen. Pro Fragevariation umfasst der
 Trainingsdatensatz insgesamt 250 Samples, der Testdatensatz enthält
 jeweils 25 pro Fragevariation.
 
+#pagebreak()
 = Ergebnisse
 
 == Ergebnisse des Visual Fine-Tunings
