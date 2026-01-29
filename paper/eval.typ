@@ -89,8 +89,8 @@ dass das Modell den aktuellen Spielzustand explizit rekonstruiert und
 darauf aufbauend mittels (chain-of-thought) eine konsistente
 Zugentscheidung ableitet. Dabei ist nicht zwingend erforderlich, dass
 die Matrixrekonstruktion in jeder Zelle fehlerfrei ist, vielmehr war die
-Annahme, dass eine weitgehend korrekte, explizit ausformulierte
-Zustandsrepräsentation dem Modell helfen kann, strategisch relevante
+Annahme, dass eine weitgehend korrekte, explizit vom Modell selbst ausformulierte
+Zustandsrepräsentation diesem helfen kann, strategisch relevante
 Strukturen zuverlässiger zu identifizieren und dadurch die finale
 Zugwahl näher am Entscheidungsverhalten des regelbasierten Bots zu
 treffen.
@@ -99,7 +99,7 @@ treffen.
 
 Zur Stabilisierung des Trainings bei hoher Lernrate (bedingt durch die
 Schwierigkeit der Fragestellungen und den vergleichsweise kleinen
-Datensatz) setzen wir neben einem eingefrorenen visuellen Adapter
+Datensatz) setzen wir wie eingangs erwähnt neben einem eingefrorenen visuellen Adapter
 zusätzlich Warmup, Early-Stopping auf Basis des Eval-Datensatzes sowie
 Rehearsal bereits gelernter Fragen in einem Anteil von $10\%$ ein. Eine
 geringere Lernrate ($2 times 10^(-5)$ statt $2 times 10^(-4)$) wurde
@@ -121,7 +121,7 @@ Nebenwirkungen auf mehrere visuelle Foki hat. Während
 `determine_who_won` im Mittel relativ stabil bleibt, zeigen vor allem
 die Zählaufgaben (`count_*_stones` sowie `count_empty_intersections`)
 deutliche Einbußen gegenüber dem Post-Visual-Zustand. Dieses Muster
-deutet auf einen leichten *catastrophic forgetting*-Effekt hin: Obwohl
+deutet auf einen leichten catastrophic forgetting-Effekt hin: Obwohl
 während des Strategy-Fine-Tunings Rehearsal und Stabilisierungstechniken
 (u. a. Warmup und Early-Stopping) eingesetzt wurden, deuten die
 rückläufigen Werte inbesenondere in einzelnen, besonders schwierigen
@@ -164,7 +164,7 @@ gegenüber einer direkten Zugvorhersage ohne Zwischenrepräsentation.
 Eine plausible Erklärung ist die unzureichende Abdeckung des
 Zustandsraums durch die Trainingsdaten: Angesichts der extrem großen
 Menge möglicher Brettkonfigurationen erscheint ein Trainingsumfang von
-lediglich $ approx 1{,}000$ Beispielen pro strategischem Fokus nicht
+lediglich $approx 1{,}000$ Beispielen pro strategischem Fokus nicht
 ausreichend, um eine konkrete Bot-Policy robust zu approximieren, selbst
 wenn das Modell zuvor grundlegende visuelle Teilfähigkeiten
 (z. B. Zellklassifikation und lokale Mustererkennung) verbessert hat.
@@ -179,20 +179,9 @@ Bot-Policy, nicht jedoch darüber, ob die tatsächlich gespielten Züge des
 Modells durch die chain-of-thought-Struktur objektiv stärker oder
 schwächer geworden sind.
 
-== Curriculum-Learning
+== Visual Curriculum
 
-Als abschließendes Experiment wurde ein Curriculum-Learning-Ansatz
-umgesetzt, um dem Modell visuelle Teilfähigkeiten schrittweise (von
-einfachen zu komplexeren Spielzuständen) zu vermitteln. Aufgrund
-zeitlicher Restriktionen sowie der Beobachtung, dass ein Großteil der
-für Gomoku relevanten Teilaufgaben primär visuell geprägt ist, wurde das
-Curriculum in der vorliegenden Umsetzung ausschließlich auf die
-Visual-Questions angewandt. Zudem erschien das Erlernen der Bot-Policy
-auf Basis von lediglich 1,000 Samples pro Fragefokus angesichts des
-großen Zustandsraums möglicher Spielpositionen als ohnehin nicht
-erreichbar. Die resultierenden Evaluationsergebnisse sind dennoch
-hinreichend, um zumindest die Erfolgsaussichten dieses Ansatzes unter
-den gegebenen Randbedingungen zu beurteilen.
+Als abschließendes Experiment wurde ein Curriculum-Learning-Ansatz implementiert, bei dem dem Modell die visuellen Foki als Teilfähigkeiten schrittweise (von einfachen zu komplexeren Spielzuständen und Aufgaben) vermittelt werden. Aufgrund zeitlicher Restriktionen sowie der Beobachtung, dass ein Großteil der für Gomoku relevanten Teilaufgaben primär visuell geprägt ist, wurde dieser Ansatz in der vorliegenden Umsetzung ausschließlich auf die Visual-Questions angewandt. Darüber hinaus erschien das Erlernen der Bot-Policy auf Basis von lediglich 1,000 Samples pro Fragefokus angesichts des großen Zustandsraums möglicher Spielpositionen als ohnehin nicht erreichbar. Die resultierenden Evaluationsergebnisse sind dennoch hinreichend, um zumindest die Erfolgsaussichten dieses Ansatzes unter den gegebenen Rahmenbedingungen zu beurteilen.
 
 === Grundidee und Progression über den Spielverlauf
 
@@ -234,29 +223,29 @@ Ein Fokus wird bewusst abweichend behandelt: `count_empty_intersections`
 weist eine inverse Schwierigkeitsprogression auf, da mit zunehmender
 Rundenzahl mehr Felder belegt sind und folglich weniger freie
 Schnittpunkte zu zählen bleiben. Dieser Fokus wird daher in umgekehrter
-Questionreihenfolge (Q4 $-> $ Q1) trainiert.
+Questionreihenfolge (Q4 $->$ Q1) trainiert.
 
 === Curriculum-Stufen und Rehearsal
 
--   Stufe 1 (Early Game; Q1\*). Visuelle Basisaufgaben in frühen
-    Spielzuständen: `color_at_position` sowie grundlegende Zählaufgaben
-    (`count_black_stones`, `count_white_stones`,
-    `count_empty_intersections`).
+- Stufe 1 (Early Game; Q1\*). Visuelle Basisaufgaben in frühen
+  Spielzuständen: `color_at_position` sowie grundlegende Zählaufgaben
+  (`count_black_stones`, `count_white_stones`,
+  `count_empty_intersections`).
 
--   Stufe 2 (Mid Game; Q2\*). Ergänzung um `three_in_a_row`,
-    `four_in_a_row` sowie `print_board_matrix`, um Reihenstrukturen und
-    die explizite Zustandsrekonstruktion frühzeitig zu adressieren,
-    jedoch erst nachdem das Modell in Stufe 1 die elementare
-    Zellklassifikation (`color_at_position`) erlernt hat.
+- Stufe 2 (Mid Game; Q2\*). Ergänzung um `three_in_a_row`,
+  `four_in_a_row` sowie `print_board_matrix`, um Reihenstrukturen und
+  die explizite Zustandsrekonstruktion frühzeitig zu adressieren,
+  jedoch erst nachdem das Modell in Stufe 1 die elementare
+  Zellklassifikation (`color_at_position`) erlernt hat.
 
--   Stufe 3 (Mid/Late Game; Q3\*). Ergänzung um `determine_who_won`
-    zur Erkennung beendeter Spielzustände.
+- Stufe 3 (Mid/Late Game; Q3\*). Ergänzung um `determine_who_won`
+  zur Erkennung beendeter Spielzustände.
 
--   Stufe 4 (Late Game; Q4\*). Integration der visuell-taktischen
-    Fragefoki `can_you_win` und `can_you_lose`, die zusätzlich zur
-    Perzeption eine Bewertung von Threat-Strukturen erfordern.
+- Stufe 4 (Late Game; Q4\*). Integration der visuell-taktischen
+  Fragefoki `can_you_win` und `can_you_lose`, die zusätzlich zur
+  Perzeption eine Bewertung von Threat-Strukturen erfordern.
 
-Zur Reduktion von *catastrophic forgetting* wird in jeder
+Zur Reduktion von catastrophic forgetting wird in jeder
 Curriculum-Stufe ein kleiner Rehearsal-Anteil aus zuvor trainierten
 Stufen beibehalten. Konkret werden pro bereits behandelter
 Fragevariation jeweils 25 Rehearsal-Samples in den Trainingsmix
@@ -296,8 +285,8 @@ spürbar in den neu hinzugekommenen Reihenaufgaben (`three_in_a_row`,
 Einfachere perzeptive Basisfähigkeiten wie `color_at_position` bleiben
 hingegen weitgehend stabil und sinken nur marginal von 0.670 auf 0.660.
 Zwar erholen sich einzelne Zählaufgaben in Stufe 4 teilweise, das
-Gesamtmuster ist jedoch konsistent mit einem *catastrophic
-forgetting*-Effekt, bei dem die Optimierung auf neu eingeführte Inhalte
+Gesamtmuster ist jedoch konsistent mit einem catastrophic
+forgetting-Effekt, bei dem die Optimierung auf neu eingeführte Inhalte
 zuvor gelernte, vergleichsweise fragile Teilfähigkeiten überlagert. Dies
 deutet darauf hin, dass der gleichmäßige Rehearsal-Anteil von 10 % in
 den späteren Stufen für die Zählfoki nicht hinreichend war und einzelne
