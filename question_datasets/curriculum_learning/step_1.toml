@@ -1,32 +1,8 @@
 [general]
-# ============================================================
-# Visual Curriculum Step 1 (Early Game)
-#
-# Ziel:
-# - Visuelle Basisfoki werden schrittweise über Spielphasen curriculisiert.
-# - Für Stern-Fragetypen gilt die feste Turn-Intervall-Zuordnung:
-#   Q1*  -> t ∈ [0, 30]
-#   Q2*  -> t ∈ [31, 75]
-#   Q3*  -> t ∈ [76, 150]
-#   Q4*  -> t ∈ [151, 224]
-#
-# Wichtig:
-# - print_board_matrix wird bewusst NICHT in Stufe 1 trainiert,
-#   sondern erst ab Stufe 2 eingeführt (nach Vortraining von color_at_position).
-#
-# Ausnahme:
-# - count_empty_intersections wird invers curriculisiert (Q4* -> Q1*),
-#   da die Aufgabe mit zunehmender Rundenzahl typischerweise leichter wird.
-#
-# Enthaltene Foki in Stufe 1:
-# - color_at_position (Q1*)
-# - count_black_stones (Q101*)
-# - count_white_stones (Q201*)
-# - count_empty_intersections (INVERTIERT: Q304* statt Q301*)
-# ============================================================
+num_samples_per_question = 250
 
-num_samples_per_question = 0
-
+# global context that will be prepended to every question text.
+# If you leave this empty or remove it, nothing extra is added.
 context = """
 You are a vision-language model analyzing Gomoku game positions.
 
@@ -41,13 +17,12 @@ Important:
 """
 
 # ============================================================
-# STEP 1: Basisfoki
-# - Early Game Varianten (Q1*, Q101*, Q201*)
-# - Invertiert für empty-intersections: Late Game Variante (Q304*)
+# Q1–Q4: color_at_position
+# Answer: one word: black|white|empty
+# Params: {row}, {col} are 0-based
 # ============================================================
 
 [questions.Q1]
-num_samples = 250
 text = """
 Task:
 Inspect exactly one intersection: row {row}, column {col} (0-based).
@@ -57,8 +32,12 @@ Output constraint:
 Return exactly one word: black, white, or empty.
 """
 
+# ============================================================
+# Q101–Q104: count_black_stones
+# Answer: one integer
+# ============================================================
+
 [questions.Q101]
-num_samples = 250
 text = """
 Task:
 Count the total number of black stones currently placed on the board (Player 1).
@@ -71,8 +50,12 @@ Output constraint:
 Return a single integer (no extra text).
 """
 
+# ============================================================
+# Q201–Q204: count_white_stones
+# Answer: one integer
+# ============================================================
+
 [questions.Q201]
-num_samples = 250
 text = """
 Task:
 Count the total number of white stones currently placed on the board (Player 2).
@@ -85,17 +68,16 @@ Output constraint:
 Return a single integer (no extra text).
 """
 
-# Invertiertes Curriculum: In Stufe 1 bewusst die "leichtere" Late-Game-Variante
-# (weniger freie Schnittpunkte zu zählen als im Early Game).
+# ============================================================
+# Q301–Q304: count_empty_intersections (INVERSE ORDER !!! Q304 -> Q301)
+# Answer: one integer
+# ============================================================
 [questions.Q304]
-num_samples = 250
 text = """
 Task:
-Count how many intersections are empty in the current board position.
-
-What to count:
-Count only intersections that contain no stone.
+Compute the number of remaining empty intersections in the shown snapshot.
+This is purely a count of empty cells (not a move recommendation).
 
 Output constraint:
-Return a single integer (no extra text).
+Return exactly one integer (no explanation).
 """
