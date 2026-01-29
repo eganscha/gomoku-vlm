@@ -537,6 +537,23 @@ def main() -> None:
     )
 
     grouped_bar(
+        title="Curriculum Step 3 vs. Step 4 — Fokus four_in_a_row",
+        x_labels=["Q501", "Q502", "Q503", "Q504"],
+        series={
+            "Step 3": [
+                CURRICULUM_VARIANTS_BY_STEP["four_in_a_row"][k][2]
+                for k in ["Q501", "Q502", "Q503", "Q504"]
+            ],
+            "Step 4": [
+                CURRICULUM_VARIANTS_BY_STEP["four_in_a_row"][k][3]
+                for k in ["Q501", "Q502", "Q503", "Q504"]
+            ],
+        },
+        ylim=(0.0, 0.45),
+        filename_stem="comp_3_to_4",
+    )
+
+    grouped_bar(
         title="Overall Summary — Post-Visual vs Post-Strategy",
         x_labels=["all", "perception", "strategy"],
         series={
