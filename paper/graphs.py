@@ -160,6 +160,71 @@ SUMMARY_CURRICULUM = {
     "Step 4": {"all": 0.249, "perception": 0.323, "strategy": 0.003},
 }
 
+# Curriculum learning per-question accuracies across steps (hardcoded from the PDF)
+# Each value list is: [Step 1, Step 2, Step 3, Step 4]
+CURRICULUM_VARIANTS_BY_STEP: dict[str, dict[str, list[float]]] = {
+    "color_at_position": {
+        "Q1": [0.960, 0.880, 0.880, 1.000],
+        "Q2": [0.840, 0.800, 0.800, 0.840],
+        "Q3": [0.680, 0.680, 0.720, 0.760],
+        "Q4": [0.200, 0.280, 0.440, 0.320],
+    },
+    "count_black_stones": {
+        "Q101": [0.080, 0.000, 0.000, 0.200],
+        "Q102": [0.000, 0.000, 0.000, 0.160],
+        "Q103": [0.040, 0.000, 0.000, 0.040],
+        "Q104": [0.000, 0.000, 0.000, 0.040],
+    },
+    "count_white_stones": {
+        "Q201": [0.280, 0.000, 0.000, 0.200],
+        "Q202": [0.000, 0.000, 0.000, 0.040],
+        "Q203": [0.000, 0.000, 0.000, 0.000],
+        "Q204": [0.000, 0.000, 0.000, 0.160],
+    },
+    "count_empty_intersections": {
+        "Q301": [0.000, 0.000, 0.000, 0.000],
+        "Q302": [0.000, 0.000, 0.000, 0.000],
+        "Q303": [0.000, 0.000, 0.000, 0.000],
+        "Q304": [0.040, 0.000, 0.000, 0.040],
+    },
+    "three_in_a_row": {
+        "Q401": [0.000, 0.440, 0.440, 0.640],
+        "Q402": [0.120, 0.160, 0.240, 0.120],
+        "Q403": [0.080, 0.080, 0.040, 0.120],
+        "Q404": [0.000, 0.000, 0.000, 0.000],
+    },
+    "four_in_a_row": {
+        "Q501": [0.000, 0.720, 0.600, 0.640],
+        "Q502": [0.040, 0.120, 0.120, 0.160],
+        "Q503": [0.120, 0.080, 0.080, 0.040],
+        "Q504": [0.080, 0.000, 0.000, 0.000],
+    },
+    "determine_who_won": {
+        "Q601": [0.040, 0.000, 0.000, 0.520],
+        "Q602": [0.000, 0.000, 0.000, 0.520],
+        "Q603": [0.360, 0.000, 0.000, 0.400],
+        "Q604": [0.480, 0.000, 0.000, 0.560],
+    },
+    "can_you_win": {
+        "Q701": [0.560, 0.480, 0.480, 0.760],
+        "Q702": [0.360, 0.640, 0.600, 0.840],
+        "Q703": [0.480, 0.520, 0.520, 0.760],
+        "Q704": [0.520, 0.440, 0.440, 0.920],
+    },
+    "can_you_lose": {
+        "Q801": [0.520, 0.480, 0.480, 0.680],
+        "Q802": [0.520, 0.440, 0.360, 0.520],
+        "Q803": [0.520, 0.520, 0.680, 0.480],
+        "Q804": [0.600, 0.440, 0.360, 0.440],
+    },
+    "print_board_matrix": {
+        "Q901": [0.000, 0.000, 0.000, 0.000],
+        "Q902": [0.000, 0.000, 0.000, 0.000],
+        "Q903": [0.000, 0.000, 0.000, 0.000],
+        "Q904": [0.000, 0.000, 0.000, 0.000],
+    },
+}
+
 VISUAL_PRE_POST_VISUAL: dict[str, tuple[list[str], list[float], list[float]]] = {
     "color_at_position": (
         ["Q1", "Q2", "Q3", "Q4"],
@@ -312,6 +377,90 @@ CURRICULUM_FOCUS = {
 }
 
 
+def curriculum_levels_heatmap(
+    title: str,
+    steps: list[str],
+    table: dict[str, dict[str, list[float]]],
+    filename_stem: str = "curriculum_levels_heatmap",
+    annotate: bool = True,
+    cmap_name: str = "turbo",
+    mask_zeros: bool = True,
+) -> Path:
+    def level_of(qid: str) -> int:
+        n = int(qid[1:])
+        return n % 10 if n >= 10 else n
+
+    row_labels: list[str] = []
+    row_data: list[list[float]] = []
+    separators: list[int] = []
+
+    for focus, qs in table.items():
+        separators.append(len(row_labels))
+        for qid, vals in sorted(qs.items(), key=lambda kv: (level_of(kv[0]), kv[0])):
+            lvl = level_of(qid)
+            row_labels.append(f"{focus} – {qid} (L{lvl})")
+            row_data.append(vals)
+
+    data = np.array(row_data, dtype=float)
+
+    if mask_zeros:
+        data_plot = np.ma.masked_where(data <= 0.0, data)
+    else:
+        data_plot = data
+
+    fig_h = max(7.5, 0.28 * len(row_labels) + 2.0)
+    fig, ax = plt.subplots(figsize=(13.0, fig_h))
+
+    cmap = plt.get_cmap(cmap_name).copy()
+    if mask_zeros:
+        cmap.set_bad(color="white")  # masked cells
+
+    im = ax.imshow(
+        data_plot,
+        aspect="auto",
+        vmin=0.0,
+        vmax=1.0,
+        cmap=cmap,
+        interpolation="nearest",
+    )
+
+    ax.set_title(f"{TITLE_PREFIX}{title}")
+    ax.set_xlabel("Curriculum Step")
+    ax.set_ylabel("Question Category – Question ID (Level)")
+
+    ax.set_xticks(np.arange(len(steps)))
+    ax.set_xticklabels(steps)
+
+    ax.set_yticks(np.arange(len(row_labels)))
+    ax.set_yticklabels(row_labels, fontsize=8)
+
+    ax.grid(False)
+
+    for i in separators[1:]:
+        ax.axhline(i - 0.5, linewidth=0.8, alpha=0.35)
+
+    if annotate:
+        for r in range(data.shape[0]):
+            for c in range(data.shape[1]):
+                v = data[r, c]
+                if mask_zeros and v <= 0.0:
+                    continue
+                ax.text(
+                    c,
+                    r,
+                    f"{v:.2f}",
+                    ha="center",
+                    va="center",
+                    fontsize=6,
+                    color="black",
+                )
+
+    cbar = fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02)
+    cbar.set_label("Accuracy")
+
+    return save_fig(fig, filename_stem)
+
+
 def mean(xs: list[float]) -> float:
     return float(np.mean(np.array(xs, dtype=float))) if xs else float("nan")
 
@@ -435,6 +584,16 @@ def main() -> None:
         series=CURRICULUM_FOCUS,
         ylim=(0.0, 1.0),
         filename_stem="curriculum_focus_trends",
+    )
+    # "turbo", "viridis", "plasma", "magma"
+    curriculum_levels_heatmap(
+        title="Curriculum Learning — Steps × Question Categories (with Levels)",
+        steps=["Step 1", "Step 2", "Step 3", "Step 4"],
+        table=CURRICULUM_VARIANTS_BY_STEP,
+        annotate=True,
+        cmap_name="turbo",
+        mask_zeros=True,
+        filename_stem="curriculum_steps_by_category_and_level_heatmap",
     )
 
     print(f"Done. Plots written to: {OUTPUT_DIR.resolve()}")
