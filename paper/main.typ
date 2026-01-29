@@ -1,8 +1,7 @@
 #import "@preview/charged-ieee:0.1.4": ieee
-
+#set text(lang: "de")
 #show: ieee.with(
   title: [MM],
-  paper-size: "a4",
   abstract: [TRAINING],
   authors: (
     (
@@ -18,5 +17,7 @@
   ),
   bibliography: bibliography("refs.bib"),
 )
+#set text(lang: "de")
 #include "struc.typ"
 #include "train.typ"
+#include "eval.typ"
