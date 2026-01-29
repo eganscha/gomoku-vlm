@@ -20,9 +20,9 @@ Das Training wurde für 3 Epochen durchgeführt. Die effektive Batch-Größe erg
 
 == Wahl der Lernrate
 
-Für den visuellen Trainingsabschnitt wurde eine Lernrate von 2 × 10⁻⁴ verwendet. Für den nachgelagerten Strategy-Trainingsschritt (Step 2) wurde die Lernrate auf 1 × 10⁻⁵ reduziert, um feinere Anpassungen auf höherer Abstraktionsebene zu ermöglichen.
+Für den visuellen Trainingsabschnitt wurde eine Lernrate von 2 × 10⁻⁴ verwendet.
 
-Vorversuche mit einer durchgängig niedrigen Lernrate im Bereich von 10⁻⁵ zeigten jedoch, dass zu Beginn kaum messbare Fortschritte erzielt wurden. Insbesondere in Kombination mit niedrigen LoRA-Rank, wie sie in vielen bestehenden Arbeiten empfohlen werden, erwies sich die Anpassung als zu restriktiv. Diese empirischen Beobachtungen motivierten die Wahl einer höheren initialen Lernrate in den frühen Trainingsphasen.
+Vorversuche mit einer niedrigen Lernrate im Bereich von 10⁻⁵ zeigten, dass zu Beginn kaum messbare Fortschritte erzielt wurden. Insbesondere in Kombination mit niedrigen LoRA-Rank, wie sie in vielen bestehenden Arbeiten empfohlen werden, erwies sich die Anpassung als zu restriktiv. Diese empirischen Beobachtungen motivierten die Wahl einer höheren initialen Lernrate in den frühen Trainingsphasen.
 
 
 == LoRA-Konfiguration und Rank-Wahl
