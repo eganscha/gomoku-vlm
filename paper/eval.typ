@@ -18,6 +18,10 @@ jeweils 25 pro Fragevariation.
   image("plots/summary_pre_vs_post_visual.png", width: 100%),
 ) <fig1>
 
+#figure(
+  image("plots/pretrain_vs_post_visual_heatmap.png", width: 100%),
+) <fig1b>
+
 == Evaluation des Visual Fine-Tunings
 
 Nach dem Fine-Tuning der visuellen Komponente zeigt sich ein deutlicher
@@ -267,10 +271,6 @@ schrittweisen Progression untersuchen wir, ob sich die Modellperformance
   image("plots/curriculum_focus_trends.png", width: 100%),
 ) <fig4>
 
-#figure(
-  image("plots/curriculum_steps_by_category_and_level_heatmap.png", width: 100%),
-) <fig5>
-
 === Gesamtbild über die vier Stufen
 
 Die Ergebnisse des Curriculum-Learnings zeigen keinen monotonen
@@ -299,6 +299,9 @@ gewichtet werden müssen (z. B. durch fokussiertes Oversampling der
 Zählaufgaben und/oder eine höhere Rehearsal-Quote speziell für diese
 Foki).
 
+#figure(
+  image("plots/comp_3_to_4.png", width: 100%),
+) <fig99>
 === Stufe 4: visuell-taktische Gewinne, aber kein proportionaler Effekt auf alle visuellen Foki
 
 Ein weiteres, besonders klares Beispiel liefert hierfür Stufe 4: Mit der
