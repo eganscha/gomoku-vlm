@@ -1,7 +1,7 @@
 == Setup und Vergleichslogik
 
 Zur Quantifizierung des Trainingseffekts des LoRA-Adapters vergleichen
-wir die in [baseline-paper] berichtete Pre-Training-Baseline mit dem
+wir die in @GanschaSchwarz2026MultimodalAI berichtete Pre-Training-Baseline mit dem
 Modellzustand nach dem Fine-Tuning. Als Leistungsmaß wird die Accuracy
 herangezogen, wobei die Bewertung durch einen LLM-as-a-Judge-Ansatz
 (LISA) erfolgt. Die Ergebnisse werden aggregiert über (i) alle Aufgaben
@@ -86,7 +86,7 @@ vertauschte Zeile) führen zur Gesamtfehlklassifikation.
 Der Fokus wurde dennoch bewusst im Frageset belassen, da er als Baustein
 für die späteren `reason_next_move`-Aufgaben vorgesehen ist: Ziel ist,
 dass das Modell den aktuellen Spielzustand explizit rekonstruiert und
-darauf aufbauend mittels (*chain-of-thought*) eine konsistente
+darauf aufbauend mittels (chain-of-thought) eine konsistente
 Zugentscheidung ableitet. Dabei ist nicht zwingend erforderlich, dass
 die Matrixrekonstruktion in jeder Zelle fehlerfrei ist, vielmehr war die
 Annahme, dass eine weitgehend korrekte, explizit ausformulierte
@@ -102,7 +102,7 @@ Schwierigkeit der Fragestellungen und den vergleichsweise kleinen
 Datensatz) setzen wir neben einem eingefrorenen visuellen Adapter
 zusätzlich Warmup, Early-Stopping auf Basis des Eval-Datensatzes sowie
 Rehearsal bereits gelernter Fragen in einem Anteil von $10\%$ ein. Eine
-geringere Lernrate ($2 times 10^{-5}$ statt $2 times 10^{-4}$) wurde
+geringere Lernrate ($2 times 10^(-5)$ statt $2 times 10^(-4)$) wurde
 ebenfalls probiert, führte jedoch erwartungsgemäß zu einem deutlich
 reduzierten Trainingserfolg der strategischen Komponente und wurde daher
 verworfen.
@@ -150,7 +150,7 @@ $15 times 15$-Matrixausgabe umfasst er eine Gewinnprüfung
 (`CAN_LOSE_NEXT_TURN`) sowie anschließend die Wahl des nächsten Zugs im
 Format `row col`, analog zum Fokus `best_next_move`. Ziel dieser
 Konstruktion war es, einen direkten Vergleich zu ermöglichen, ob ein
-*chain-of-thought*-Reasoning die Imitation der Bot-Policy im Gegensatz
+chain-of-thought-Reasoning die Imitation der Bot-Policy im Gegensatz
 zur einfachen Ausgabe der besten `row col` verbessert. Trotz dieser
 strukturierten Anleitung gelang es dem Modell jedoch nicht, das
 Entscheidungsverhalten des regelbasierten Bots zuverlässig nachzuahmen,
@@ -158,7 +158,7 @@ dies zeigt sich gleichermaßen für `best_next_move` und
 `reason_next_move`.
 
 Beide Fragefoki konnten vom Modell nicht erlernt werden. Damit liefert
-die explizite *chain-of-thought*-Struktur keinen messbaren Zusatznutzen
+die explizite chain-of-thought-Struktur keinen messbaren Zusatznutzen
 gegenüber einer direkten Zugvorhersage ohne Zwischenrepräsentation.
 
 Eine plausible Erklärung ist die unzureichende Abdeckung des
@@ -176,7 +176,7 @@ Verhalten des Bots als Ground Truth behandelt und damit implizit als
 hier nur relativ zum verwendeten Bot definiert. Folglich erlaubt die
 Evaluation primär Aussagen über die Imitationsgüte gegenüber der
 Bot-Policy, nicht jedoch darüber, ob die tatsächlich gespielten Züge des
-Modells durch die *chain-of-thought*-Struktur objektiv stärker oder
+Modells durch die chain-of-thought-Struktur objektiv stärker oder
 schwächer geworden sind.
 
 == Curriculum-Learning
