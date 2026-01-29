@@ -160,6 +160,7 @@ SUMMARY_CURRICULUM = {
     "Step 4": {"all": 0.249, "perception": 0.323, "strategy": 0.003},
 }
 
+
 # Curriculum learning per-question accuracies across steps (hardcoded from the PDF)
 # Each value list is: [Step 1, Step 2, Step 3, Step 4]
 CURRICULUM_VARIANTS_BY_STEP: dict[str, dict[str, list[float]]] = {
@@ -376,6 +377,45 @@ CURRICULUM_FOCUS = {
     "print_board_matrix": [0.000, 0.000, 0.000, 0.000],
 }
 
+PREPOST_VARIANTS_BY_STEP: dict[str, dict[str, list[float]]] = {
+    "color_at_position": {
+        "Q1": [0.64, 0.96],
+        "Q2": [0.68, 0.76],
+        "Q3": [0.40, 0.64],
+        "Q4": [0.20, 0.52],
+    },
+    "count_black_stones": {
+        "Q101": [0.04, 0.60],
+        "Q102": [0.00, 0.12],
+        "Q103": [0.00, 0.04],
+        "Q104": [0.00, 0.20],
+    },
+    "count_white_stones": {
+        "Q201": [0.12, 0.68],
+        "Q202": [0.04, 0.16],
+        "Q203": [0.00, 0.04],
+        "Q204": [0.00, 0.20],
+    },
+    "count_empty_intersections": {
+        "Q301": [0.00, 0.04],
+        "Q302": [0.00, 0.00],
+        "Q303": [0.00, 0.00],
+        "Q304": [0.04, 0.08],
+    },
+    "three_in_a_row": {
+        "Q401": [0.00, 0.68],
+        "Q402": [0.20, 0.16],
+        "Q403": [0.80, 0.16],
+        "Q404": [0.00, 0.08],
+    },
+    "four_in_a_row": {
+        "Q501": [0.00, 0.60],
+        "Q502": [0.00, 0.20],
+        "Q503": [0.04, 0.08],
+        "Q504": [0.04, 0.08],
+    },
+}
+
 
 def curriculum_levels_heatmap(
     title: str,
@@ -385,6 +425,8 @@ def curriculum_levels_heatmap(
     annotate: bool = True,
     cmap_name: str = "turbo",
     mask_zeros: bool = True,
+    xlabel: str = "Curriculum Step",
+    ylabel: str = "Question Category – Question ID (Level)",
 ) -> Path:
     def level_of(qid: str) -> int:
         n = int(qid[1:])
@@ -413,7 +455,7 @@ def curriculum_levels_heatmap(
 
     cmap = plt.get_cmap(cmap_name).copy()
     if mask_zeros:
-        cmap.set_bad(color="white")  # masked cells
+        cmap.set_bad(color="white")
 
     im = ax.imshow(
         data_plot,
@@ -425,8 +467,8 @@ def curriculum_levels_heatmap(
     )
 
     ax.set_title(f"{TITLE_PREFIX}{title}")
-    ax.set_xlabel("Curriculum Step")
-    ax.set_ylabel("Question Category – Question ID (Level)")
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
 
     ax.set_xticks(np.arange(len(steps)))
     ax.set_xticklabels(steps)
@@ -452,7 +494,7 @@ def curriculum_levels_heatmap(
                     ha="center",
                     va="center",
                     fontsize=6,
-                    color="black",
+                    color="white",
                 )
 
     cbar = fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02)
@@ -591,9 +633,20 @@ def main() -> None:
         steps=["Step 1", "Step 2", "Step 3", "Step 4"],
         table=CURRICULUM_VARIANTS_BY_STEP,
         annotate=True,
-        cmap_name="turbo",
-        mask_zeros=True,
+        cmap_name="viridis",
+        mask_zeros=False,
         filename_stem="curriculum_steps_by_category_and_level_heatmap",
+    )
+
+    curriculum_levels_heatmap(
+        title="Pre-Train vs Post-Visual",
+        steps=["Pre Train", "Post Visual"],
+        table=PREPOST_VARIANTS_BY_STEP,
+        annotate=True,
+        cmap_name="viridis",
+        mask_zeros=False,
+        filename_stem="pretrain_vs_post_visual_heatmap",
+        xlabel="",
     )
 
     print(f"Done. Plots written to: {OUTPUT_DIR.resolve()}")
