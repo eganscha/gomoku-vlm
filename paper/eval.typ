@@ -267,6 +267,10 @@ schrittweisen Progression untersuchen wir, ob sich die Modellperformance
   image("plots/curriculum_focus_trends.png", width: 100%),
 ) <fig4>
 
+#figure(
+  image("plots/curriculum_steps_by_category_and_level_heatmap.png", width: 100%),
+) <fig5>
+
 === Gesamtbild über die vier Stufen
 
 Die Ergebnisse des Curriculum-Learnings zeigen keinen monotonen
