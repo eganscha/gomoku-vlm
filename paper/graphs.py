@@ -23,7 +23,7 @@ def setup_style() -> None:
             "axes.labelsize": 12,
             "xtick.labelsize": 10,
             "ytick.labelsize": 10,
-            "legend.fontsize": 24,
+            "legend.fontsize": 16,
             "axes.titlepad": 12,
             "figure.autolayout": False,
         }
