@@ -549,7 +549,7 @@ def main() -> None:
                 for k in ["Q501", "Q502", "Q503", "Q504"]
             ],
         },
-        ylim=(0.0, 0.45),
+        ylim=(0.0, 0.7),
         filename_stem="comp_3_to_4",
     )
 
@@ -650,8 +650,8 @@ def main() -> None:
         steps=["Step 1", "Step 2", "Step 3", "Step 4"],
         table=CURRICULUM_VARIANTS_BY_STEP,
         annotate=True,
-        cmap_name="viridis",
-        mask_zeros=False,
+        cmap_name="plasma",
+        mask_zeros=True,
         filename_stem="curriculum_steps_by_category_and_level_heatmap",
     )
 
@@ -660,8 +660,8 @@ def main() -> None:
         steps=["Pre Train", "Post Visual"],
         table=PREPOST_VARIANTS_BY_STEP,
         annotate=True,
-        cmap_name="viridis",
-        mask_zeros=False,
+        cmap_name="plasma",
+        mask_zeros=True,
         filename_stem="pretrain_vs_post_visual_heatmap",
         xlabel="",
     )
