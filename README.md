@@ -1,5 +1,15 @@
 # Gomoku VLM Training Project
 
+## Project Description
+
+Dieses Projekt implementiert eine modulare Pipeline zum LoRA Fine Tuning von Qwen3 VL 2B Instruct für Gomoku. Aus parallel simulierten Bot Partien werden 15 × 15 Brettzustände als NumPy Arrays erzeugt, headless mit Koordinatenbeschriftung gerendert und zu visuellen sowie strategischen Frage Antwort Datensätzen aufbereitet.
+
+Die Pipeline umfasst Datensatzgenerierung, Training, Evaluation und Hugging Face Integration für Datensätze und Ergebnisse. Die Modellleistung wird vor und nach dem Training über definierte visuelle und strategische Aufgaben evaluiert und mittels LLM as a Judge durch das hochschulinterne LLM LISA bewertet.
+
+## Hugging Face Dataset
+
+https://huggingface.co/datasets/eganscha/gomoku_vlm_ds
+
 ## Installation
 ```bash
 git clone https://github.com/frederik-uni/gomoku-vlm.git
