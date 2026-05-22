@@ -1,4 +1,4 @@
-# Gomoku VLM Training Project
+# Multimodal AI: Gomoku VLM Fine Tuning
 
 ## Project Description
 
